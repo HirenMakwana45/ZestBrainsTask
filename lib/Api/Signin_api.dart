@@ -6,7 +6,7 @@ import 'package:fino_wise/Model/Login_model.dart';
 import 'package:http/http.dart' as http;
 
 class SigninApi {
-  Future<LoginModel> apichangepassword({
+  Future<LoginModel> apiSignin({
     required String Country_Code,
     required String Mobile_No,
     required String Otp,
@@ -15,7 +15,7 @@ class SigninApi {
   }) async {
     var url = Uri.parse('http://hexeros.com/dev/finowise/api/V1/verify_otp');
     var response = await http.post(url,
-        body: ({
+        body: jsonEncode({
           'country_code': Country_Code,
           'mobile': Mobile_No,
           'otp': Otp,
@@ -26,7 +26,7 @@ class SigninApi {
           'Content-Type': 'application/json',
         });
 
-    Encoding.getByName('utf-8');
+    // Encoding.getByName('utf-8');
 
     Map<String, dynamic> map = await jsonDecode(response.body);
 
