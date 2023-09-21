@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:fino_wise/Core/Utils/image_constant.dart';
+import 'package:fino_wise/Persistence/Dashboard_screen.dart';
 import 'package:fino_wise/Persistence/Signin_screen.dart';
 import 'package:fino_wise/Widgets/custom_imageview.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +9,7 @@ import 'package:page_transition/page_transition.dart';
 import 'package:flutter/services.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:fino_wise/firebase_options.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -51,10 +53,11 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     setState(() {
       Timer(const Duration(seconds: 2), () {
-        Navigator.push(
-            context,
-            PageTransition(
-                type: PageTransitionType.fade, child: const SigninScreen()));
+        checkCondition();
+        // Navigator.push(
+        //     context,
+        //     PageTransition(
+        //         type: PageTransitionType.fade, child: const SigninScreen()));
       });
     });
     super.initState();
@@ -74,5 +77,42 @@ class _SplashScreenState extends State<SplashScreen> {
         ),
       ),
     );
+  }
+
+  void callApi() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    sharedPreferences.setBool("isLogin", true);
+
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (context) => const DashboardScreen()));
+  }
+
+  void checkCondition() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    bool? isLogin = sharedPreferences.getBool("isLogin");
+
+    print("===>IS LOGIN=>" + isLogin.toString());
+
+    if (isLogin != null) {
+      if (isLogin) {
+        callApi();
+      } else {
+        Navigator.push(
+            context,
+            PageTransition(
+                type: PageTransitionType.fade, child: const SigninScreen()));
+      }
+    } else {
+      print("====LOGIN ELSE");
+      Navigator.push(
+          context,
+          PageTransition(
+              type: PageTransitionType.fade, child: const SigninScreen()));
+      // if(mounted){
+      //
+      // }
+      // Navigator.of(context, rootNavigator: true)
+      //     .push(MaterialPageRoute(builder: (context) => SigninScreen()));
+    }
   }
 }

@@ -17,6 +17,8 @@ class _DashboardScreenState extends State<DashboardScreen>
   late TabController tabController;
   TradeListModel? _tradeListModel;
   bool _isDataAvailable = true;
+  List<Userdata> _allUsers = [];
+  List<Userdata> _foundUsers = [];
 
   String Filtertrade = "ongoing";
   String Token = "";
@@ -37,6 +39,43 @@ class _DashboardScreenState extends State<DashboardScreen>
     super.initState();
   }
 
+  // Search Filter
+
+  void _runFilter(String enteredKeyword) {
+    List<Userdata> results = [];
+    if (enteredKeyword.isEmpty) {
+      // if the search field is empty or only contains white-space, we'll display all users
+      results = _allUsers;
+    } else {
+      results = _allUsers
+          .where((user) =>
+              user.name!.toLowerCase().contains(enteredKeyword.toLowerCase()) ||
+              user.action!
+                  .toLowerCase()
+                  .contains(enteredKeyword.toLowerCase()) ||
+              user.stock!
+                  .toLowerCase()
+                  .contains(enteredKeyword.toLowerCase()) ||
+              user.status!
+                  .toLowerCase()
+                  .contains(enteredKeyword.toLowerCase()) ||
+              user.user!.name!
+                  .toLowerCase()
+                  .contains(enteredKeyword.toLowerCase()) ||
+              user.type!.toLowerCase().contains(enteredKeyword.toLowerCase()))
+          .toList();
+
+      // we use the toLowerCase() method to make it case-insensitive
+    }
+
+    // Refresh the UI
+    setState(() {
+      print("FOUND??" + _foundUsers.toString());
+      _foundUsers = results;
+    });
+  }
+
+  // Local Get Data
   void tokenpreference() async {
     print("1");
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -47,6 +86,7 @@ class _DashboardScreenState extends State<DashboardScreen>
     });
   }
 
+  // Trading List Api
   TradeAPI() {
     setState(() {
       print("2");
@@ -668,7 +708,10 @@ class _DashboardScreenState extends State<DashboardScreen>
                 child: Column(
                   children: [
                     TextFormField(
-                      // onChanged: (value) => _runFilter(value),
+                      onChanged: (value) {
+                        print(value);
+                        _runFilter(value);
+                      },
 
                       cursorColor: const Color.fromARGB(255, 0, 0, 0),
                       // cursorHeight: 18,

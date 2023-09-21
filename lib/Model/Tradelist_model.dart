@@ -12,7 +12,7 @@ String tradeListModelToJson(TradeListModel data) => json.encode(data.toJson());
 class TradeListModel {
   int? status;
   String? message;
-  List<Datum>? data;
+  List<Userdata>? data;
   int? newTrades;
 
   TradeListModel({
@@ -27,7 +27,8 @@ class TradeListModel {
         message: json["message"],
         data: json["data"] == null
             ? null
-            : List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
+            : List<Userdata>.from(
+                json["data"].map((x) => Userdata.fromJson(x))),
         newTrades: json["new_trades"],
       );
 
@@ -39,7 +40,7 @@ class TradeListModel {
       };
 }
 
-class Datum {
+class Userdata {
   int? id;
   int? mentorId;
   String? type;
@@ -57,7 +58,7 @@ class Datum {
   int? isSubscribe;
   User? user;
 
-  Datum({
+  Userdata({
     this.id,
     this.mentorId,
     this.type,
@@ -76,7 +77,7 @@ class Datum {
     this.user,
   });
 
-  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
+  factory Userdata.fromJson(Map<String, dynamic> json) => Userdata(
         id: json["id"],
         mentorId: json["mentor_id"],
         type: json["type"],

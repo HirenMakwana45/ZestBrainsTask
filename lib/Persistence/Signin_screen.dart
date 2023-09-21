@@ -93,6 +93,7 @@ class _SigninScreenState extends State<SigninScreen> {
   void tokenpreference() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
+      prefs.setBool("isLogin", true);
       prefs.setString('logintoken', token).toString();
     });
   }
@@ -175,15 +176,6 @@ class _SigninScreenState extends State<SigninScreen> {
               print(value);
             },
           ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                print('Entered OTP: ${_otpController.text}');
-              },
-              child: Text('Submit'),
-            ),
-          ],
         );
       },
     );
