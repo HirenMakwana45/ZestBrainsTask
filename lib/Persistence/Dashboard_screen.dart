@@ -93,6 +93,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                 color: const Color(0xff00C8BC),
               ),
               labelColor: Colors.white,
+              labelPadding: EdgeInsets.all(0),
               unselectedLabelColor: const Color(0xff545454),
               tabs: [
                 Container(

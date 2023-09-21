@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "321017225867",
+    "project_id": "finowise-2e9f5",
+    "storage_bucket": "finowise-2e9f5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:321017225867:android:878ecdac60fc5a784daa8e",
+        "android_client_info": {
+          "package_name": "com.example.fino_wise"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCA6XSmBTBg0HU9KPnQbZCM6UscnKWNR1Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -5,6 +5,8 @@ import 'package:fino_wise/Widgets/custom_imageview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class SigninScreen extends StatefulWidget {
   const SigninScreen({super.key});
@@ -14,6 +16,48 @@ class SigninScreen extends StatefulWidget {
 }
 
 class _SigninScreenState extends State<SigninScreen> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final GoogleSignIn googleSignIn = GoogleSignIn();
+
+// Function For Google Signin
+
+  Future<String?> signInWithGoogle() async {
+    try {
+      final GoogleSignInAccount? googleSignInAccount =
+          await googleSignIn.signIn();
+
+      if (googleSignInAccount != null) {
+        final GoogleSignInAuthentication googleSignInAuthentication =
+            await googleSignInAccount.authentication;
+
+        final AuthCredential credential = GoogleAuthProvider.credential(
+          accessToken: googleSignInAuthentication.accessToken,
+          idToken: googleSignInAuthentication.idToken,
+        );
+
+        final UserCredential authResult =
+            await _auth.signInWithCredential(credential);
+        final User? user = authResult.user;
+
+        if (user != null) {
+          // Check if user is new or existing
+          assert(!user.isAnonymous);
+          assert(await user.getIdToken() != null);
+
+          final User currentUser = _auth.currentUser!;
+          assert(user.uid == currentUser.uid);
+
+          print('Google Sign-In succeeded: $user');
+
+          return '$user';
+        }
+      }
+    } catch (error) {
+      print(error);
+      return null;
+    }
+  }
+
   String phoneNumber = "";
   String countryCode = "";
   @override
@@ -80,6 +124,7 @@ class _SigninScreenState extends State<SigninScreen> {
                         ),
                       )),
                       child: CountryCodePicker(
+                        flagWidth: 20,
                         padding: const EdgeInsets.all(0),
                         showDropDownButton: true,
                         onChanged: (CountryCode code) {
@@ -182,7 +227,11 @@ class _SigninScreenState extends State<SigninScreen> {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)),
                         backgroundColor: const Color(0xffDC4E41)),
-                    onPressed: () {},
+                    onPressed: () {
+                      setState(() {
+                        signInWithGoogle();
+                      });
+                    },
                     child: Container(
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
