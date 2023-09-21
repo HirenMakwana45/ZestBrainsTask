@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:fino_wise/Core/Utils/image_constant.dart';
-import 'package:fino_wise/Persistence/Dashboard_screen.dart';
+import 'package:fino_wise/Persistence/Signin_screen.dart';
 import 'package:fino_wise/Widgets/custom_imageview.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
@@ -47,7 +47,7 @@ class _SplashScreenState extends State<SplashScreen> {
         Navigator.push(
             context,
             PageTransition(
-                type: PageTransitionType.fade, child: const DashboardScreen()));
+                type: PageTransitionType.fade, child: const SigninScreen()));
       });
     });
     super.initState();
