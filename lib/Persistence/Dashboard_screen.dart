@@ -75,6 +75,12 @@ class _DashboardScreenState extends State<DashboardScreen>
     });
   }
 
+  int getItemCount() {
+    return _foundUsers.isNotEmpty
+        ? _foundUsers.length
+        : _tradeListModel!.data!.length;
+  }
+
   // Local Get Data
   void tokenpreference() async {
     print("1");
@@ -101,6 +107,9 @@ class _DashboardScreenState extends State<DashboardScreen>
           _tradeListModel = value;
 
           _isDataAvailable = false;
+          _allUsers = _tradeListModel!.data!;
+
+          _foundUsers = _allUsers;
 
           print("--- TradeList Api Calling ---");
         });
@@ -708,10 +717,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                 child: Column(
                   children: [
                     TextFormField(
-                      onChanged: (value) {
-                        print(value);
-                        _runFilter(value);
-                      },
+                      onChanged: (value) => _runFilter(value),
 
                       cursorColor: const Color.fromARGB(255, 0, 0, 0),
                       // cursorHeight: 18,
@@ -760,8 +766,23 @@ class _DashboardScreenState extends State<DashboardScreen>
                             physics: const BouncingScrollPhysics(),
                             scrollDirection: Axis.vertical,
                             shrinkWrap: true,
-                            itemCount: _tradeListModel!.data!.length,
+                            itemCount: getItemCount(),
                             itemBuilder: (context, index) {
+                              final result = _foundUsers.isNotEmpty
+                                  ? _foundUsers[index]
+                                  : Userdata(
+                                      name: _tradeListModel!.data![index].name
+                                          .toString(),
+                                      action: _tradeListModel!
+                                          .data![index].action
+                                          .toString(),
+                                      stock: _tradeListModel!.data![index].stock
+                                          .toString(),
+                                      status: _tradeListModel!
+                                          .data![index].status
+                                          .toString(),
+                                      type: _tradeListModel!.data![index].type!
+                                        ..toString());
                               return Column(
                                 children: [
                                   Container(
@@ -786,9 +807,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                                                   softWrap: true,
                                                   maxLines: 2,
                                                   overflow: TextOverflow.fade,
-                                                  _tradeListModel!
-                                                      .data![index].name
-                                                      .toString(),
+                                                  result.name.toString(),
                                                   style: const TextStyle(
                                                       color: Colors.white,
                                                       fontFamily: "Poppins",
@@ -899,9 +918,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                                                   CrossAxisAlignment.start,
                                               children: [
                                                 Text(
-                                                  _tradeListModel!
-                                                      .data![index].type!
-                                                      .toString(),
+                                                  result.type!.toString(),
                                                   style: const TextStyle(
                                                       color: Color(0xff000000),
                                                       fontFamily: "Inter",
@@ -1015,8 +1032,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                                                   margin: EdgeInsets.only(
                                                       left: w * 0.16),
                                                   child: Text(
-                                                    _tradeListModel!
-                                                        .data![index].stock!
+                                                    result.stock!
                                                         .toString()
                                                         .split(" ")[0],
                                                     style: const TextStyle(
@@ -1032,9 +1048,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                                                   margin: EdgeInsets.only(
                                                       left: w * 0.13),
                                                   child: Text(
-                                                    _tradeListModel!
-                                                        .data![index].action!
-                                                        .toString(),
+                                                    result.action!.toString(),
                                                     style: const TextStyle(
                                                         color:
                                                             Color(0xff000000),
@@ -1114,9 +1128,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                                                         top: w * 0.005,
                                                         bottom: w * 0.005),
                                                     child: Text(
-                                                      _tradeListModel!
-                                                          .data![index].status
-                                                          .toString(),
+                                                      result.status.toString(),
                                                       style: const TextStyle(
                                                           color:
                                                               Color(0xff00C8BC),
